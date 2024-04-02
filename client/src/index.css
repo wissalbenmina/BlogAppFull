@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-img {
+  @apply bg-cover bg-no-repeat;
+  background-image: url('./assets/background.png');
+}
+
+.primary-color {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 via-purple-500 to-violet-500  inline-block;
+}
+
+.bg-primary-color {
+  @apply bg-gradient-to-r from-fuchsia-500 via-purple-500 to-violet-500 inline-block;
+}
