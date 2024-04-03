@@ -17,7 +17,7 @@ async function getAllPosts(req, res){
 }
 
 // get user's all posts
-async function getPosts(req, res) {
+async function getPostsById(req, res) {
     try {
       // Verify the token of the logged-in user
       const token = req.headers.authorization.split(' ')[1];
@@ -35,7 +35,7 @@ async function getPosts(req, res) {
 
 // get post by id
 async function getPostById(req, res) {
-    const id = req.params;
+    const id = req.params.id;
     try {
         const post = await Post.findById(id);
 
@@ -135,7 +135,7 @@ async function deletePost(req, res){
 
 module.exports = {
     getAllPosts,
-    getPosts,
+    getPostsById,
     getPostById,
     createPost,
     updatePost,

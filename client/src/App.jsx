@@ -2,22 +2,29 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import MainContent from './components/MainContent';
-import LoginForm from './components/LoginForm';
-import SignUpForm from './components/SignUpForm';
+import MainContent from './pages/MainContent';
+import LoginForm from './pages/LoginForm';
+import SignUpForm from './pages/SignUpForm';
+import PostDetails from './pages/PostDetails'
+import Profile from './pages/Profile';
 
 function App() {
   return (
     <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<MainContent />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/signup" element={<SignUpForm />} />
-        {/* Redirect to home page if path not found */}
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-      <Footer />
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow mt-[70px]">
+          <Routes>
+            <Route path="/" element={<MainContent />} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/signup" element={<SignUpForm />} />
+            <Route path='/posts/:id' element={<PostDetails/>}/>
+            <Route path='/profile' element={<Profile/>}/>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </Router>
   );
 }

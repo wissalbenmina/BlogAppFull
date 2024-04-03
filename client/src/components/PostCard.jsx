@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 
 const PostCard = ({ post, className }) => {
   const [username, setUsername] = useState('');
@@ -32,9 +33,10 @@ const PostCard = ({ post, className }) => {
         <h2 className="font-roboto font-bold text-xl text-dark-soft mt-6">{post.title}</h2>
         <p className="text-dark-light mt-3 text-sm text-base line-clamp-3">{post.content}</p>
         <div className="flex items-center mt-4 mb-3">
-          <a href="#" className="text-sm text-gray-500 hover:text-primary-color">
+          <Link to={`/posts/${post._id}`} 
+                className="text-sm text-gray-500 hover:text-primary-color">
             Read More
-          </a>
+          </Link>
         </div>
       </div>
     </div>

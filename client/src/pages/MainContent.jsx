@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import PostCard from './PostCard';
+import PostCard from '../components/PostCard';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const MainContent = () => {
   const [posts, setPosts] = useState([]);
+
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -19,6 +21,16 @@ const MainContent = () => {
     };
   
     fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    // Check if the user is authenticated by checking local storage
+    const token = localStorage.getItem('token');
+    if (token) {
+      setAuthenticated(true);
+    } else {
+      setAuthenticated(false);
+    }
   }, []);
   
   return (
@@ -37,18 +49,24 @@ const MainContent = () => {
       </div>
 
       <div className="mx-auto max-w-2xl px-4 py-3 sm:px-6 sm:py-9 lg:max-w-7xl lg:px-9">
-        <div className='flex justify-between items-center'>
-          <h1 className="text-3xl font-bold mb-9">Posts</h1>
-          {/* <button className="rounded-lg text-white bg-primary-color p-2 w-30 mt-3">Add Post</button> */}
-          {/* <button className="rounded-lg text-white bg-primary-color p-2 w-30 mt-3" onClick={addPost}>Add Post <FontAwesomeIcon icon={faPlus} /></button> */}
-        </div>
+        {authenticated ? (
+          <div className='flex justify-between items-center mb-9'>
+            <h1 className="text-3xl font-bold">Posts</h1>
+            <button className="rounded-lg text-white bg-primary-color p-2 w-30">Add Post</button> 
+          </div>
+        ): (
+          <div className='flex justify-between items-center'>
+            <h1 className="text-3xl font-bold mb-9">Posts</h1>
+          </div>
+        )}
+        {/* <button className="rounded-lg text-white bg-primary-color p-2 w-30 mt-3" onClick={addPost}>Add Post <FontAwesomeIcon icon={faPlus} /></button> */}
 
         {posts.length === 0 ? (
           <p className="text-lg text-gray-700">No posts available</p>
         ) : (
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-8 mx-5">
             {posts.map((post) => (
-            <PostCard key={post.id} post={post}/>
+            <PostCard key={post._id} post={post} />
           ))}
           </div>
           // <section className='container mx-auto flex flex-wrap md:gap-x-5 gap-y-5 px-5 py-10'>

@@ -31,8 +31,8 @@ const upload = multer({ storage: storage });
 // router.use(auth);
 
 router.get('/getPosts', Posts.getAllPosts);
-router.get('/getPostsById/:id', Posts.getPosts);
-router.get('/getPostById/:id', auth, Posts.getPosts);
+router.get('/getPostsById/:id', Posts.getPostsById);
+router.get('/getPostById/:id', Posts.getPostById);
 router.post('/createPost', auth, upload.single('image'), auth, Posts.createPost);
 router.put('/updatePost/:id', auth, Posts.updatePost);
 router.delete('/deletePost/:id', auth, Posts.deletePost);
