@@ -7,6 +7,7 @@ import LoginForm from './pages/LoginForm';
 import SignUpForm from './pages/SignUpForm';
 import PostDetails from './pages/PostDetails'
 import Profile from './pages/Profile';
+import AddPostForm from './pages/AddPostForm';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/signup" element={<SignUpForm />} />
             <Route path='/posts/:id' element={<PostDetails/>}/>
             <Route path='/profile' element={<Profile/>}/>
+            <Route path='/add-post' element={<AddPostForm/>}/>
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

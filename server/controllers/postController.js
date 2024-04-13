@@ -51,32 +51,25 @@ async function getPostById(req, res) {
 
 // create a post
 // Route handler for uploading image and creating a new post
-async function createPost(req, res){
+const createPost = async (req, res) => {
     try {
-        // Check if an image was uploaded
-        // if (!req.file) {
-        //     return res.status(400).json({ message: 'No image uploaded' });
-        // }
-
-        const {title, content, image} = req.body;
-        const userId = req.userId;
-        // const imageUrl = req.file.path;
-
-        const newPost = new Post({
-            title, 
-            content,
-            // image: imageUrl,
-            image,
-            userId
-        });
-
-        const savedPost = await newPost.save();
-
-        res.status(200).send(savedPost)
+      // Check if an image was uploaded
+      if (!req.file) {
+        return res.status(400).json({ message: 'No image uploaded' });
+      }
+  
+      // Create a new post
+      const { title, content } = req.body;
+      const userId = req.userId;
+      const imageUrl = req.file.path; // Image URL provided by Cloudinary
+  
+      const newPost = new Post({ title, content, image: imageUrl, userId });
+      const savedPost = await newPost.save();
+      res.status(201).json(savedPost);
     } catch (error) {
-        res.status(500).send({ error: error.message });
+      res.status(500).json({ message: error.message });
     }
-}
+  }
 
 // update Post
 async function updatePost(req, res){
