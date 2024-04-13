@@ -31,7 +31,7 @@ const PostCard = ({ post, className }) => {
           <p className='flex items-center font-roboto text-10 ml-6'>{username}</p>
         </div>
         <h2 className="font-roboto font-bold text-xl text-dark-soft mt-6 text-purple-500">{post.title}</h2>
-        <p className="text-dark-light mt-3 text-sm text-base line-clamp-3">{post.content}</p>
+        <p className="text-dark-light mt-3 text-sm line-clamp-3">{post.content}</p>
         <div className="flex items-center mt-4 mb-3">
           <Link to={`/posts/${post._id}`} 
                 className="text-sm text-gray-500 hover:text-primary-color">

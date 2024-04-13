@@ -30,6 +30,7 @@ const LoginForm = () => {
       });
 
       if (!response.ok) {
+        setError("Invalid email or password");
         throw new Error("Invalid email or password");
       }
 

@@ -1,123 +1,154 @@
-import React, { useState } from "react";
-import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import {jwtDecode} from 'jwt-decode';
 
-export default function AddPostForm() {
-  const token = localStorage.getItem("token");
-  
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    image: null, // Store uploaded image
-  });
+const Profile = () => {
+  const [user, setUser] = useState(null);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    // Retrieve token from local storage
+    const token = localStorage.getItem('token');
+    
+    // Decode the token to extract user ID
+    const decoded = jwtDecode(token);
+    const userId = decoded.userId; // Assuming the token contains userId field
 
-  const isLoggedIn = () => {
-    // checking if a token exists
-    return !!token;
-  };
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    const newValue = name === "image" ? files[0] : value;
-    setFormData({ ...formData, [name]: newValue });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formDataToSend = new FormData();
-    formDataToSend.append("title", formData.title);
-    formDataToSend.append("content", formData.content);
-    formDataToSend.append("image", formData.image);
-
-    // console.log(formData.image)
-
-    const response = await fetch("http://localhost:3000/posts/createPost", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token.replace(/['"]+/g, '')}`,
-        },
-        body: formDataToSend,
-      });
-    // console.log("Response status:", response.statusText);
-
-    if (!response.ok) {
-      console.log("Failed to submit form");
-    }
-    navigate("/");
-    // const responseData = await response.json(); 
-    // console.log("Response data:", responseData);
-  };
+    // Fetch user data using the user ID
+    fetch(`http://localhost:3000/users/getUser/${userId}`)
+      .then(response => response.json())
+      .then(data => setUser(data))
+      .catch(error => console.error('Error fetching user:', error));
+  }, []);
 
   return (
-    <>
-      {isLoggedIn() ? (
-        <>
-          <h1 className="container font-bold ml-11 text-3xl mt-36">
-            Add Your New Post
-          </h1>
-          <form className="max-w-sm mx-auto mb-36" onSubmit={handleSubmit}>
-            <div>
-              <label
-                htmlFor="title"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Title
-              </label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                onChange={handleChange}
-                className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="content"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Content
-              </label>
-              <textarea
-                id="content"
-                name="content"
-                rows="4"
-                onChange={handleChange}
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-[#A87C7C]"
-                placeholder="Leave a comment..."
-              ></textarea>
-            </div>
-            <div>
-              <label
-                htmlFor="image"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Image
-              </label>
-              <input
-                type="file"
-                id="image"
-                name="image"
-                onChange={handleChange}
-                accept="image/*"
-                className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
-            </div>
-            <button
-              type="submit"
-              className="text-white bg-[#3E3232] hover:bg-[#7E6363] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  my-4"
+    <div>
+      {user ? (
+        <main className="profile-page">
+        <section className="relative block" style={{ height: "500px" }}>
+          <div
+            className="absolute top-0 w-full h-full bg-center bg-cover"
+            style={{
+              backgroundImage:
+                "url('https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2710&amp;q=80')"
+            }}
+          >
+            <span
+              id="blackOverlay"
+              className="w-full h-full absolute opacity-50 bg-black"
+            ></span>
+          </div>
+          <div
+            className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden"
+            style={{ height: "70px" }}
+          >
+            <svg
+              className="absolute bottom-0 overflow-hidden"
+              xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="none"
+              version="1.1"
+              viewBox="0 0 2560 100"
+              x="0"
+              y="0"
             >
-              Submit
-            </button>
-          </form>
-        </>
+              <polygon
+                className="text-gray-300 fill-current"
+                points="2560 0 2560 100 0 100"
+              ></polygon>
+            </svg>
+          </div>
+        </section>
+        <section className="relative py-16 bg-gray-300">
+          <div className="container mx-auto px-4">
+            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+              <div className="px-6">
+                <div className="flex flex-wrap justify-center">
+                  <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
+                    <div className="relative">
+                      <img
+                        alt="..."
+                        src="../src/assets/profile-picture.png"
+                        className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
+                        style={{ maxWidth: "150px" }}
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
+                    <div className="py-6 px-3 mt-32 sm:mt-0">
+                      <button
+                        className="rounded-lg text-white bg-primary-color p-2 w-20 text-center uppercase font-bold hover:shadow-md shadow text-xs outline-none focus:outline-none sm:mr-2 mb-1"
+                        type="button"
+                        style={{ transition: "all .15s ease" }}
+                      >
+                        <a href='#footer'>Settings</a>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-4/12 px-4 lg:order-1">
+                    <div className="flex justify-center py-4 lg:pt-4 pt-8">
+                      <div className="mr-4 p-3 text-center">
+                        <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                          12
+                        </span>
+                        <span className="text-sm text-gray-500">Companies</span>
+                      </div>
+                      <div className="mr-4 p-3 text-center">
+                        <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                          32
+                        </span>
+                        <span className="text-sm text-gray-500">Projects</span>
+                      </div>
+                      <div className="lg:mr-4 p-3 text-center">
+                        <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
+                          3
+                        </span>
+                        <span className="text-sm text-gray-500">Collaborations</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-center mt-12">
+                  <h3 className="text-4xl font-semibold leading-normal mb-2 text-gray-800">
+                    {user.username}
+                  </h3>
+                  <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
+                    <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>{" "}
+                    {user.email}
+                  </div>
+                  <div className="mb-2 text-gray-700 mt-10">
+                    <i className="fas fa-briefcase mr-2 text-lg text-gray-500"></i>
+                    Full Stack Developer
+                  </div>
+                  <div className="mb-2 text-gray-700">
+                    <i className="fas fa-university mr-2 text-lg text-gray-500"></i>
+                    B.Tech (CSE)
+                  </div>
+                </div>
+                <div className="mt-10 py-10 border-t border-gray-300 text-center">
+                  <div className="flex flex-wrap justify-center">
+                    <div className="w-full lg:w-9/12 px-4">
+                      <p className="mb-4 text-lg leading-relaxed text-gray-800">
+                        A developer with expertise in multiple stacks with use of latest technologies. Worked with multiple
+                        clients on different ideas to implement and create successful products for real world problems and to simplify them.
+                      </p>
+                      <a
+                        href="#pablo"
+                        className="font-normal text-pink-500"
+                        onClick={e => e.preventDefault()}
+                      >
+                        Show more
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
       ) : (
-        <p className="text-gray-600 m-40 text-center text-4xl">
-          You should login
-        </p>
+        <p>Loading...</p>
       )}
-    </>
-  );
+    </div>
+  )
 }
+
+export default Profile

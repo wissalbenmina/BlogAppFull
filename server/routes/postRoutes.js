@@ -30,7 +30,7 @@ const upload = multer({ storage: storage });
 // router.use(auth);
 
 router.get('/getPosts', Posts.getAllPosts);
-router.get('/getPostsById/:id', Posts.getPostsById);
+router.get('/getPostsById/:id',auth, Posts.getPostsById);
 router.get('/getPostById/:id', Posts.getPostById);
 router.post('/createPost',upload.single('image'), auth, Posts.createPost);
 router.put('/updatePost/:id', auth, Posts.updatePost);
