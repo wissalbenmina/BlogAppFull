@@ -32,7 +32,7 @@ const PostCard = ({ post, className }) => {
         </div>
         <h2 className="font-roboto font-bold text-xl text-dark-soft mt-6 text-purple-500">{post.title}</h2>
         <p className="text-dark-light mt-3 text-sm line-clamp-3">{post.content}</p>
-        <div className="absolute sm:bottom-[80px] flex items-center mt-4 mb-3">
+        <div className="flex items-center mt-4 mb-3">
           <Link to={`/posts/${post._id}`} 
                 className="text-sm text-gray-500 hover:text-primary-color">
             Read More

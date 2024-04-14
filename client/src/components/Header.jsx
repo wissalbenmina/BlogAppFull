@@ -15,7 +15,7 @@ function classNames(...classes) {
 }
 
 const Header = () => {
-  const isAuthenticated = useSelector((state) => state.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
   const handleLogout = () => {

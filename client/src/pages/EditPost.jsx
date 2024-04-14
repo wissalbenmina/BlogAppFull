@@ -1,23 +1,61 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditPost = () => {
-    const {id} = useParams();
-    const [post, setPost] = useState();
+  const { id } = useParams();
 
-    useEffect(() => {
-        const fetchPostData = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3000/posts/getPostById/${id}`)
-                setPost(response.data)
-            } catch (error) {
-                console.error('Error fetching post:', error);
-            }
+  const navigate = useNavigate();
+
+  const [post, setPost] = useState({
+    title: "",
+    content: "",
+    image: "",
+  });
+
+  useEffect(() => {
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/posts/getPostById/${id}`
+        );
+        setPost(response.data);
+      } catch (error) {
+        console.error("Error fetching post:", error);
+      }
+    };
+    fetchPostData();
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPost({ ...post, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.patch(
+        `http://localhost:3000/posts/updatePost/${id}`,
+        post,
+        {
+          headers: {
+            Authorization: `Bearer ${token.replace(/['"]+/g, "")}`,
+          },
         }
-        fetchPostData();
-    }, [id]);
-    
+      );
+
+      if (response.status === 200) {
+        navigate("/profile");
+      } else {
+        throw new Error("Failed to submit form");
+      }
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
+  };
+
   return (
     <div>
       <section className="p-6 bg-gray-100 text-gray-900">
@@ -41,8 +79,8 @@ const EditPost = () => {
                 <input
                   id="title"
                   type="text"
-                  placeholder="Username"
                   name="title"
+                  value={post.title}
                   onChange={handleChange}
                   className="w-full p-1 rounded-md focus:ring focus:ring-opacity-75 text-gray-800 focus:ring-violet-600 border-gray-300"
                 />
@@ -58,11 +96,12 @@ const EditPost = () => {
                   id="content"
                   name="content"
                   rows="4"
+                  value={post.content}
                   onChange={handleChange}
                   className="w-full p-1 rounded-md focus:ring focus:ring-opacity-75 text-gray-800 focus:ring-violet-600 border-gray-300"
                 ></textarea>
               </div>
-              <div className="col-span-full">
+              {/* <div className="col-span-full">
                 <label
                   htmlFor="image"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -73,17 +112,16 @@ const EditPost = () => {
                   type="file"
                   id="image"
                   name="image"
-                  onChange={handleChange}
                   accept="image/*"
                   className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
-              </div>
+              </div> */}
               <div className="col-span-full">
                 <button
                   type="submit"
                   className="w-full text-[18px] mt-6 rounded-lg bg-primary-color p-2"
                 >
-                  Add Post
+                  Update Post
                 </button>
               </div>
             </div>
@@ -91,7 +129,7 @@ const EditPost = () => {
         </form>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default EditPost
+export default EditPost;

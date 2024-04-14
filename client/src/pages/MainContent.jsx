@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const MainContent = () => {
   const [posts, setPosts] = useState([]);
 
-  const isAuthenticated = useSelector((state) => state.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
   useEffect(() => {
