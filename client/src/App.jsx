@@ -8,6 +8,7 @@ import SignUpForm from './pages/SignUpForm';
 import PostDetails from './pages/PostDetails'
 import Profile from './pages/Profile';
 import AddPostForm from './pages/AddPostForm';
+import EditPost from './pages/EditPost';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path='/posts/:id' element={<PostDetails/>}/>
             <Route path='/profile' element={<Profile/>}/>
             <Route path='/add-post' element={<AddPostForm/>}/>
+            <Route path='edit-post/:id' element={<EditPost/>}/>
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

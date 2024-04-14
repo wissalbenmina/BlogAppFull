@@ -43,7 +43,6 @@ const MainContent = () => {
           <div className='flex justify-between items-center mb-9'>
             <h1 className="text-3xl font-bold">Posts</h1>
             <Link to='/add-post' className="rounded-lg text-white bg-primary-color p-2 w-30">Add Post</Link>
-            {/* <button className="rounded-lg text-white bg-primary-color p-2 w-30">Add Post</button>  */}
           </div>
         ): (
           <div className='flex justify-between items-center'>

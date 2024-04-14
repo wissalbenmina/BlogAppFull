@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import axios from 'axios';
-import PostCard from '../components/PostCard';
+import axios from "axios";
+import PostCard from "../components/PostCard";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import MyPosts from "../components/MyPosts";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -11,33 +12,83 @@ const Profile = () => {
   const isAuthenticated = useSelector((state) => state.isAuthenticated);
   const dispatch = useDispatch();
 
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     try {
+  //       const response = await axios.get('http://localhost:3000/posts/getPosts');
+  //       setPosts(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching posts:', error);
+  //     }
+  //   };
+
+  //   fetchPosts();
+  // }, []);
+
+  // useEffect(() => {
+  //   // Retrieve token from local storage
+  //   const token = localStorage.getItem("token");
+
+  //   // Decode the token to extract user ID
+  //   const decoded = jwtDecode(token);
+  //   const userId = decoded.userId; // Assuming the token contains userId field
+
+  //   // Fetch user data using the user ID
+  //   fetch(`http://localhost:3000/users/getUser/${userId}`)
+  //     .then((response) => response.json())
+  //     .then((data) => setUser(data))
+  //     .catch((error) => console.error("Error fetching user:", error));
+  // }, []);
+
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/posts/getPosts'); 
-        setPosts(response.data);
+        // Retrieve token from local storage
+        const token = localStorage.getItem("token");
+
+        // Decode the token to extract user ID
+        const decoded = jwtDecode(token);
+        const userId = decoded.userId; // Assuming the token contains userId field
+
+        // Fetch user data using the user ID
+        const response = await axios.get(
+          `http://localhost:3000/users/getUser/${userId}`
+        );
+        setUser(response.data);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching user:", error);
       }
     };
-  
-    fetchPosts();
-  }, []);
 
-  useEffect(() => {
-    // Retrieve token from local storage
-    const token = localStorage.getItem("token");
+    const fetchUserPosts = async () => {
+      try {
+        // Retrieve token from local storage
+        const token = localStorage.getItem("token");
 
-    // Decode the token to extract user ID
-    const decoded = jwtDecode(token);
-    const userId = decoded.userId; // Assuming the token contains userId field
+        // Decode the token to extract user ID
+        const decoded = jwtDecode(token);
+        const userId = decoded.userId; // Assuming the token contains userId field
 
-    // Fetch user data using the user ID
-    fetch(`http://localhost:3000/users/getUser/${userId}`)
-      .then((response) => response.json())
-      .then((data) => setUser(data))
-      .catch((error) => console.error("Error fetching user:", error));
-  }, []);
+        // Fetch posts associated with the user ID
+        const response = await axios.get(
+          `http://localhost:3000/posts/getPostsById/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token.replace(/['"]+/g, "")}`,
+            },
+          }
+        );
+        setPosts(response.data);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchUserData();
+      fetchUserPosts();
+    }
+  }, [isAuthenticated]);
 
   return (
     <div>
@@ -176,7 +227,7 @@ const Profile = () => {
                       ) : (
                         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-8 mx-5">
                           {posts.map((post) => (
-                            <PostCard key={post._id} post={post} />
+                            <MyPosts key={post._id} post={post} />
                           ))}
                         </div>
                       )}
