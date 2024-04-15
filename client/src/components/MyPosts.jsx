@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { deletePostRequest, deletePostSuccess, deletePostFailure } from '../redux/actions/postActions';
 
 const MyPosts = ({ post, className }) => {
   const [username, setUsername] = useState("");
+  const navigate = useNavigate()
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const deleting = useSelector(state => state.post.deleting);
-  const error = useSelector(state => state.post.error);
-  const deletedPostId = useSelector(state => state.post.deletedPostId);
+  // const deleting = useSelector(state => state.post.deleting);
+  // const error = useSelector(state => state.post.error);
+  // const deletedPostId = useSelector(state => state.post.deletedPostId);
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -29,7 +30,7 @@ const MyPosts = ({ post, className }) => {
   }, [post.userId]);
 
   const handleDelete = async () => {
-    dispatch(deletePostRequest());
+    // dispatch(deletePostRequest());
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
@@ -40,23 +41,24 @@ const MyPosts = ({ post, className }) => {
           },
         }
       );
-      dispatch(deletePostSuccess(post._id));
+      // dispatch(deletePostSuccess(post._id));
       // Assuming the server returns a success message upon deletion
+      navigate('/');
       console.log(response.data.message);
       
     } catch (error) {
-      dispatch(deletePostFailure(error.message));
+      // dispatch(deletePostFailure(error.message));
       console.error("Error deleting post:", error);
     }
   };
 
-  if (deleting) {
-    return <div>Deleting post...</div>;
-  }
+  // if (deleting) {
+  //   return <div>Deleting post...</div>;
+  // }
 
-  if (error) {
-    return <div>Error deleting post: {error}</div>;
-  }
+  // if (error) {
+  //   return <div>Error deleting post: {error}</div>;
+  // }
 
   return (
     <div

@@ -221,9 +221,20 @@ const Profile = () => {
                   <div className="mt-10 py-10 border-t border-gray-300">
                     <div className="">
                       {posts.length === 0 ? (
-                        <p className="text-lg text-gray-700">
-                          No posts available
-                        </p>
+                        <div>
+                          <div className="flex justify-between items-center mb-9">
+                            <h1 className="text-3xl font-bold">Posts</h1>
+                            <Link
+                              to="/add-post"
+                              className="rounded-lg text-white bg-primary-color p-2 w-30"
+                            >
+                              Add Post
+                            </Link>
+                          </div>
+                          <p className="text-lg text-gray-700">
+                            No posts available
+                          </p>
+                        </div>
                       ) : (
                         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-8 mx-5">
                           {posts.map((post) => (

@@ -73,7 +73,6 @@ const AddPostForm = () => {
                 <input
                   id="title"
                   type="text"
-                  placeholder="Username"
                   name="title"
                   onChange={handleChange}
                   className="w-full p-1 rounded-md focus:ring focus:ring-opacity-75 text-gray-800 focus:ring-violet-600 border-gray-300"
